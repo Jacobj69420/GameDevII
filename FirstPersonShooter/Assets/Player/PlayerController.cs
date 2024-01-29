@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
+using System.Runtime.CompilerServices;
+using UnityEngine.Windows.Speech;
 
 public class PlayerController : MonoBehaviour
 {
+
+    public TMP_Text debug_text;
 
     public Camera cam;
     private Vector2 look_input = Vector2.zero;
@@ -17,6 +22,19 @@ public class PlayerController : MonoBehaviour
     [Range(0.01f,1f)]public float sensitivity;
 
 
+    private Vector2 move_input;
+    private bool grounded;
+
+    private CharacterController character_controller;
+    private Vector3 player_velocity;
+    private Vector3 wish_dir = Vector3.zero;
+    public float max_speed = 6;
+    public float acceleration = 60;
+    public float gravity = 20;
+    public float stop_speed = 0.5f;
+    public float jump_impulse = 10f;
+    public float friction = 4;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +43,9 @@ public class PlayerController : MonoBehaviour
 
         if (invert_x) invert_factor_x = -1;
         if (invert_y) invert_factor_y = -1;
+
+
+        character_controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -37,8 +58,17 @@ public class PlayerController : MonoBehaviour
     {
         look_input = context.ReadValue<Vector2>();
     }
+    public void GetMoveInput(InputAction.CallbackContext context)
+    {
+        look_input = context.ReadValue<Vector2>();
+    }
+        
+    public void GetJumpInput(InputAction.CallbackContext context)
+        {
+            Jump();
+        }
 
-    private void Look()
+            private void Look()
     {
         transform.Rotate(Vector3.up, look_input.x * look_speed * Time.deltaTime * invert_factor_x * sensitivity);
 
@@ -47,5 +77,41 @@ public class PlayerController : MonoBehaviour
         horizontal_look_angle -= angle;
         horizontal_look_angle = Mathf.Clamp(horizontal_look_angle, -90, 90);
         cam.transform.localRotation = Quaternion.Euler(horizontal_look_angle, 0, 0);
+    }
+            private void Jump()
+            {
+                if(grounded)
+                {
+
+                }
+            }
+    private Vector3 Accelerate(Vector3 wish_dir, Vector3 current_velocity, float accel, float max_speed)
+    {
+        float proj_speed = Vector3.Dot(current_velocity, wish_dir);
+        float accel_speed = accel * Time.deltaTime;
+
+        if(proj_speed + accel_speed > max_speed) 
+            accel_speed = max_speed - proj_speed;
+
+        return current_velocity + (wish_dir * accel_speed);
+    }
+
+    private Vector3 MoveGround(Vector3 wish_dir, Vector3 current_velocity)
+    {
+        Vector3 new_velocity = new Vector3(current_velocity.x, 0, current_velocity.z);
+        if(speed <= stop_speed)
+        {
+            new_velocity = Vector3.zero;
+            look_speed = 0;
+        }
+        if(look_speed != 0)
+        {
+            float drop = look_speed * friction * Time.deltaTime;
+         
+
+               new_velocity *= Mathf.Max(look_speed - drop, 0) / speed;
+        }
+        new_velocity = new Vector3(new_velocity.x, current_velocity.y, new_velocity.z);
+        return Accelerate(wish_dir, new_velocity, acceleration max_speed);
     }
 }
