@@ -729,7 +729,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -1697.483, w: -1002.91895}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1348,6 +1348,7 @@ GameObject:
   - component: {fileID: 1634768869}
   - component: {fileID: 1634768868}
   - component: {fileID: 1634768867}
+  - component: {fileID: 1634768871}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1398,8 +1399,8 @@ MonoBehaviour:
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1634768868}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 1634768871}
+        m_TargetAssemblyTypeName: PlayerStateMachine, Assembly-CSharp
         m_MethodName: GetMoveInput
         m_Mode: 0
         m_Arguments:
@@ -1449,12 +1450,12 @@ MonoBehaviour:
   cam: {fileID: 681871285}
   invert_x: 0
   invert_y: 0
-  sensitivity: 0.45
+  sensitivity: 0.43
   max_speed: 6
   acceleration: 60
   gravity: 20
   stop_speed: 0.5
-  jump_impulse: 10
+  jump_impulse: 15
   friction: 4
 --- !u!143 &1634768869
 CharacterController:
@@ -1498,6 +1499,22 @@ Transform:
   - {fileID: 681871287}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1634768871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1634768866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07fb8ee7085b2a94d85462a9a50211ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character_controller: {fileID: 0}
+  move_input: {x: 0, y: 0}
+  player_velocity: {x: 0, y: 0, z: 0}
+  jump_button_pressed: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
